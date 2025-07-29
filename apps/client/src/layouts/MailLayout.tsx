@@ -1,12 +1,15 @@
+import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { Outlet } from 'react-router';
 
-export function MailLayout() {
+
+export default function MailLayout() {
   return (
-    <div className="flex h-screen">
-      {/* <Sidebar /> -- sidebar component */}
-      <main className="">
+    <SidebarProvider>
+      <AppSidebar/>
+      <main>
         <Outlet />
       </main>
-    </div>
-  );
+    </SidebarProvider>
+  )
 }
