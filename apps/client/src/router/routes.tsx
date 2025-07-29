@@ -1,12 +1,12 @@
-import { createBrowserRouter } from 'react-router';
-import { MailLayout } from '@/layouts/MailLayout';
+import MailLayout from '@/layouts/MailLayout';
 import { PlainLayout } from '@/layouts/PlainLayout';
 import { SettingLayout } from '@/layouts/SettingLayout';
-import Hero from '@/pages/hero/HeroPage';
 import Login from '@/pages/auth/SignInPage';
-import Appearance from '@/pages/settings/AppearancePage';
-import Inbox from '@/pages/mail/InboxPage';
+import Hero from '@/pages/hero/HeroPage';
 import Compose from '@/pages/mail/ComposePage';
+import Inbox from '@/pages/mail/InboxPage';
+import Appearance from '@/pages/settings/AppearancePage';
+import { createBrowserRouter, Navigate } from 'react-router';
 
 export const router = createBrowserRouter([
   {
@@ -20,7 +20,7 @@ export const router = createBrowserRouter([
     path: '/mail',
     element: <MailLayout />,
     children: [
-      { index: true, element: <Inbox /> },
+      { index: true, element: <Navigate to='inbox' replace /> },
       { path: 'inbox', element: <Inbox /> },
       { path: 'compose', element: <Compose /> }
     ]
@@ -32,5 +32,9 @@ export const router = createBrowserRouter([
       { index: true, element: <Appearance /> },
       { path: 'appearance', element: <Appearance /> }
     ]
+  },
+  {
+    path: '*',
+    element: <h1>404 not found</h1>
   }
 ]);
