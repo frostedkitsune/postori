@@ -1,0 +1,9 @@
+#  Refer for explanation to following link:
+#  https://lefthook.dev/configuration/
+
+pre-commit:
+  commands:
+    check:
+      glob: "*.{js,ts,cjs,mjs,d.js,d.ts,d.cts,d.mts,jsx,tsx,json,jsonc}"
+      run: bunx biome check --write --no-errors-on-unmatched {staged_files}
+      stage_fixed: true
