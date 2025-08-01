@@ -8,7 +8,11 @@ import ErrorFallback, { logError } from "@/components/ErrorFallback";
 export default function MailLayout() {
 
   return (
-    <SidebarProvider>
+    <SidebarProvider style={
+      {
+        "--sidebar-width": "200px",
+      } as React.CSSProperties
+    }>
       <AppSidebar />
       <main className="w-full flex">
         <ErrorBoundary fallback={<ErrorFallback />} onError={logError}>
