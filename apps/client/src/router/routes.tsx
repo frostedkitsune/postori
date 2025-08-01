@@ -5,6 +5,7 @@ import Login from '@/pages/auth/SignInPage';
 import Hero from '@/pages/hero/HeroPage';
 import Compose from '@/pages/mail/ComposePage';
 import Inbox from '@/pages/mail/InboxPage';
+import TrashPage from '@/pages/mail/TrashPage';
 import Appearance from '@/pages/settings/AppearancePage';
 import { createBrowserRouter, Navigate } from 'react-router';
 
@@ -22,7 +23,8 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to='inbox' replace /> },
       { path: 'inbox', element: <Inbox /> },
-      { path: 'compose', element: <Compose /> }
+      { path: 'compose', element: <Compose /> },
+      { path: 'trash', element: <TrashPage /> }
     ]
   },
   {
