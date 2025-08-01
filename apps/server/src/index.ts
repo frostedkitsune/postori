@@ -1,17 +1,22 @@
-import { Hono } from 'hono';
-import { cors } from 'hono/cors';
-import email from './routes/email';
+import { Hono } from "hono";
+import { cors } from "hono/cors";
+import email from "./routes/email";
 
-const app = new Hono();
+const app = new Hono()
 
-app.use("/api/*", cors({
-  origin: "http://localhost:5173",
-  credentials: true
-}))
+  // middlewares
+  .use(
+    "/api/*",
+    cors({
+      origin: "http://localhost:5173",
+      credentials: true,
+    }),
+  )
 
-
-export const routes = app
+  // basepath
   .basePath("/api")
+
+  // routes
   .route("/email", email);
 
 export default app;
