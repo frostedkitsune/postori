@@ -8,10 +8,10 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
 import { Pen, Image, Link, Paperclip, CaseSensitive, Trash, Minimize2, Maximize2 } from "lucide-react";
-import { Textarea } from "./ui/textarea";
 import { Input } from "./ui/input";
 import { useState } from "react";
 import { TagInput } from "./TagInput";
+import Editor from "./Editor";
 
 const LabelTag: React.FC<{ label: string; children?: React.ReactNode }> = ({
   label,
@@ -91,10 +91,8 @@ export function Compose() {
           <Input className=" border-none outline-none focus:shadow-none shadow-none focus-visible:ring-0 font-semibold pb-4"/>
         </LabelTag>
 
-        <Textarea
-          className="p-0 border-none outline-none focus:shadow-none shadow-none focus-visible:ring-0 max-h-48 min-h-32 resize-none"
-          placeholder="..."
-        />
+        {/*Editor*/}
+        <Editor/>
 
         <div className="flex items-center gap-2 mt-auto">
           <Button>Send</Button>
