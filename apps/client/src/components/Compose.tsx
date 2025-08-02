@@ -4,9 +4,10 @@ import {
   DialogContent,
   DialogTitle,
   DialogHeader,
+  DialogClose
 } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
-import { Pen, Image, Link, Paperclip, CaseSensitive, Trash } from "lucide-react";
+import { Pen, Image, Link, Paperclip, CaseSensitive, Trash, Minimize2, Maximize2 } from "lucide-react";
 import { Textarea } from "./ui/textarea";
 import { Input } from "./ui/input";
 import { useState } from "react";
@@ -16,7 +17,7 @@ const LabelTag: React.FC<{ label: string; children?: React.ReactNode }> = ({
   label,
   children,
 }) => (
-  <div className="flex flex-row items-center gap-2 mb-2">
+  <div className="flex flex-row items-start gap-2 mb-2">
     <span className="w-12 text-zinc-400 mb-auto">{label}:</span>
     {children}
   </div>
@@ -25,6 +26,9 @@ const LabelTag: React.FC<{ label: string; children?: React.ReactNode }> = ({
 export function Compose() {
   const [ccState, setCcState] = useState<boolean>(false);
   const [bccState, setBccState] = useState<boolean>(false);
+
+  // for maximize minmize state
+  const [maximized, setMaximized] = useState(false);
 
   // state for tags
   const [toEmails, setToEmails] = useState<string[]>([]);
@@ -37,14 +41,25 @@ export function Compose() {
           <Pen className="mr-2" /> Compose
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className={`${maximized ? "min-w-[90vw] h-[90vh] max-w-none" : "sm:max-w-xl"} flex flex-col justify-start`} showCloseButton={false}>
         <DialogHeader>
           <DialogTitle className="mb-2">New Message</DialogTitle>
         </DialogHeader>
+        <div className="absolute top-4 right-4 flex gap-2">
+          <button
+            onClick={() => setMaximized(!maximized)}
+            className="p-1 rounded hover:bg-accent">
+                {maximized ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+          </button>
+          <DialogClose className="p-1 rounded hover:bg-accent">
+            <span className="sr-only">Close</span>
+                ✕
+          </DialogClose>
+        </div>
 
         {/* To + CC/BCC */}
         <LabelTag label="from">
-          <span className="text-[12px] ">postori@error.party</span>
+          <span className="text-[12px] py-1">postori@error.party</span>
         </LabelTag>
         <div className="flex flex-row items-start gap-2">
           <div className="flex-1">
@@ -73,15 +88,15 @@ export function Compose() {
         }
 
         <LabelTag label="subject">
-          <Input className="m-0 border-none outline-none focus:shadow-none shadow-none focus-visible:ring-0 font-semibold h-full"/>
+          <Input className=" border-none outline-none focus:shadow-none shadow-none focus-visible:ring-0 font-semibold pb-4"/>
         </LabelTag>
 
         <Textarea
-          className="p-0 border-none outline-none focus:shadow-none shadow-none focus-visible:ring-0 max-h-48 min-h-32"
+          className="p-0 border-none outline-none focus:shadow-none shadow-none focus-visible:ring-0 max-h-48 min-h-32 resize-none"
           placeholder="..."
         />
 
-        <div className="flex items-center gap-2 mt-4">
+        <div className="flex items-center gap-2 mt-auto">
           <Button>Send</Button>
           <Button variant="ghost">
             <CaseSensitive />
