@@ -1,5 +1,4 @@
-import { FilePenLine, Inbox, MailWarning, Send, Settings, Star, Trash } from "lucide-react";
-
+import { FilePenLine, Inbox, MailWarning, Send, Settings, Star, Trash } from "lucide-react";;
 import {
   Sidebar,
   SidebarContent,
@@ -9,8 +8,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem
-} from "@/components/ui/sidebar";
-import { Link, useLocation } from "react-router";
+} from "@/components/ui/sidebar";;
+import { Link, useLocation, useLocation } from "react-router";;
 
 // Menu items.
 const items = [
@@ -53,13 +52,16 @@ const items = [
 
 
 export function AppSidebar() {
+  let { pathname } = useLocation();
+  let path = pathname.split("/")[2];
+
   const location = useLocation();
 
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>General</SidebarGroupLabel>
+          <SidebarGroupLabel className="font-semibold">General</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (

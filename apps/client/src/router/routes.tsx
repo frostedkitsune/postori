@@ -4,7 +4,8 @@ import { SettingLayout } from '@/layouts/SettingLayout';
 import Login from '@/pages/auth/SignInPage';
 import Hero from '@/pages/hero/HeroPage';
 import Compose from '@/pages/mail/ComposePage';
-import Inbox from '@/pages/mail/InboxPage'; 
+import Inbox from '@/pages/mail/InboxPage';
+import TrashPage from '@/pages/mail/TrashPage';
 import Profile from '@/pages/settings/ProfilePage';
 import Appearance from '@/pages/settings/AppearancePage';
 import { createBrowserRouter, Navigate } from 'react-router';
@@ -25,6 +26,7 @@ export const router = createBrowserRouter([
       { index: true, element: <Navigate to='inbox' replace /> },
       { path: 'inbox', element: <Inbox /> },
       { path: 'compose', element: <Compose /> },
+      { path: 'trash', element: <TrashPage /> },
       {
         path: 'settings',
         element: <SettingLayout />,
