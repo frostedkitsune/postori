@@ -1,4 +1,4 @@
-import { FilePenLine, Inbox, MailWarning, Send, Star, Trash } from "lucide-react"
+import { FilePenLine, Inbox, MailWarning, Send, Settings, Star, Trash } from "lucide-react";
 
 import {
   Sidebar,
@@ -8,9 +8,9 @@ import {
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { Link } from "react-router"
+  SidebarMenuItem
+} from "@/components/ui/sidebar";
+import { Link, useLocation } from "react-router";
 
 // Menu items.
 const items = [
@@ -43,11 +43,18 @@ const items = [
     title: "Trash",
     url: "trash",
     icon: Trash,
+  },
+  {
+    title: "Setting",
+    url: "settings",
+    icon: Settings,
   }
 ];
 
 
 export function AppSidebar() {
+  const location = useLocation();
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -57,8 +64,8 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link to={item.url}>
+                  <SidebarMenuButton asChild isActive={location.pathname.includes(item.url)} className="text-sm data-[active=true]:bg-primary data-[active=true]:text-primary-foreground">
+                    <Link to={item.url} className="">
                       <item.icon />
                       <span>{item.title}</span>
                     </Link>

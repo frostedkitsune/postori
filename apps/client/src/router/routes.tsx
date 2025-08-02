@@ -4,9 +4,11 @@ import { SettingLayout } from '@/layouts/SettingLayout';
 import Login from '@/pages/auth/SignInPage';
 import Hero from '@/pages/hero/HeroPage';
 import Compose from '@/pages/mail/ComposePage';
-import Inbox from '@/pages/mail/InboxPage';
+import Inbox from '@/pages/mail/InboxPage'; 
+import Profile from '@/pages/settings/ProfilePage';
 import Appearance from '@/pages/settings/AppearancePage';
 import { createBrowserRouter, Navigate } from 'react-router';
+import ImportPage from '@/pages/settings/ImportPage';
 
 export const router = createBrowserRouter([
   {
@@ -22,17 +24,20 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to='inbox' replace /> },
       { path: 'inbox', element: <Inbox /> },
-      { path: 'compose', element: <Compose /> }
+      { path: 'compose', element: <Compose /> },
+      {
+        path: 'settings',
+        element: <SettingLayout />,
+        children: [
+          { index: true, element: <Navigate to='profile' replace /> },
+          { path: 'profile', element: <Profile /> },
+          { path: 'appearance', element: <Appearance /> },
+          { path: 'import', element: <ImportPage /> },
+        ]
+      },
     ]
   },
-  {
-    path: '/settings',
-    element: <SettingLayout />,
-    children: [
-      { index: true, element: <Appearance /> },
-      { path: 'appearance', element: <Appearance /> }
-    ]
-  },
+
   {
     path: '*',
     element: <h1>404 not found</h1>

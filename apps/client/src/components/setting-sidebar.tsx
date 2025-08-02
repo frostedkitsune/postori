@@ -10,7 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from "@/components/ui/sidebar";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 const items = [
   {
@@ -33,6 +33,8 @@ const items = [
 
 
 export function SettingSidebar() {
+  const location = useLocation();
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -42,7 +44,7 @@ export function SettingSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild isActive={location.pathname.includes(item.url)} className="text-sm data-[active=true]:bg-primary data-[active=true]:text-primary-foreground">
                     <Link to={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
