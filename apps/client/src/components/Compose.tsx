@@ -4,15 +4,16 @@ import {
   DialogContent,
   DialogTitle,
   DialogHeader,
-  DialogClose
+  DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
-import { Pen, Image, Link, Paperclip, CaseSensitive, Trash, Minimize2, Maximize2 } from "lucide-react";
+import { Pen, Image, Link, Paperclip, Trash, Minimize2, Maximize2 } from "lucide-react";
 import { Input } from "./ui/input";
 import { useState } from "react";
 import { TagInput } from "./TagInput";
 import Editor from "./Editor";
 
+// this component is for wrap the emails and label
 const LabelTag: React.FC<{ label: string; children?: React.ReactNode }> = ({
   label,
   children,
@@ -23,7 +24,8 @@ const LabelTag: React.FC<{ label: string; children?: React.ReactNode }> = ({
   </div>
 );
 
-export function Compose() {
+// main component
+const Compose=()=>{
   const [ccState, setCcState] = useState<boolean>(false);
   const [bccState, setBccState] = useState<boolean>(false);
 
@@ -34,6 +36,11 @@ export function Compose() {
   const [toEmails, setToEmails] = useState<string[]>([]);
   const [ccEmails, setCcEmails] = useState<string[]>([]);
   const [bccEmails, setBccEmails] = useState<string[]>([]);
+
+  // for content
+  const [html, setHtml] = useState<string>("");
+  const [plainText, setPlainText] = useState<string>("");
+
   return (
     <Dialog>
       <DialogTrigger>
@@ -41,7 +48,7 @@ export function Compose() {
           <Pen className="mr-2" /> Compose
         </Button>
       </DialogTrigger>
-      <DialogContent className={`${maximized ? "min-w-[90vw] h-[90vh] max-w-none" : "sm:max-w-xl"} flex flex-col justify-start`} showCloseButton={false}>
+      <DialogContent className={`${maximized ? "min-w-[90vw] h-[90vh] max-w-none" : "sm:max-w-2xl sm:min-h-[90vh"} flex flex-col justify-start`} showCloseButton={false}>
         <DialogHeader>
           <DialogTitle className="mb-2">New Message</DialogTitle>
         </DialogHeader>
@@ -57,12 +64,14 @@ export function Compose() {
           </DialogClose>
         </div>
 
-        {/* To + CC/BCC */}
+        {/*From + To + CC/BCC */}
+        {/*from*/}
         <LabelTag label="from">
           <span className="text-[12px] py-1">postori@error.party</span>
         </LabelTag>
         <div className="flex flex-row items-start gap-2">
           <div className="flex-1">
+            {/*to*/}
             <LabelTag label="to">
               <TagInput value={toEmails} onChange={setToEmails}/>
             </LabelTag>
@@ -76,29 +85,33 @@ export function Compose() {
             </Button>}
           </div>
         </div>
+        {/*cc*/}
         {
           ccState && <><LabelTag label="cc">
             <TagInput value={ccEmails} onChange={setCcEmails}/>
           </LabelTag></>
         }
+        {/*bcc*/}
         {
           bccState && <><LabelTag label="bcc">
             <TagInput value={bccEmails} onChange={setBccEmails}/>
           </LabelTag></>
         }
-
+        
+        {/*subject*/}
         <LabelTag label="subject">
           <Input className=" border-none outline-none focus:shadow-none shadow-none focus-visible:ring-0 font-semibold pb-4"/>
         </LabelTag>
 
         {/*Editor*/}
-        <Editor/>
+        <Editor
+        content=""
+        setHtml={setHtml}
+        setPlainText={setPlainText}/>
 
+        {/*footer*/}
         <div className="flex items-center gap-2 mt-auto">
-          <Button>Send</Button>
-          <Button variant="ghost">
-            <CaseSensitive />
-          </Button>
+          <Button className="mr-2">Send</Button>
           <Button variant="ghost">
             <Image />
           </Button>
@@ -116,3 +129,5 @@ export function Compose() {
     </Dialog>
   );
 }
+
+export default Compose;
