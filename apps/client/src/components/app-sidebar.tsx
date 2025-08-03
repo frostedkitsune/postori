@@ -1,4 +1,15 @@
-import { FilePenLine, Inbox, MailWarning, Send, Settings, Star, Trash } from "lucide-react";;
+import {
+  FilePenLine,
+  Inbox,
+  MailWarning,
+  Send,
+  Settings,
+  Star,
+  Trash,
+} from "lucide-react";
+
+import { Link, useLocation } from "react-router";
+import Compose from "@/components/Compose";
 import {
   Sidebar,
   SidebarContent,
@@ -7,9 +18,8 @@ import {
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem
-} from "@/components/ui/sidebar";;
-import { Link, useLocation, useLocation } from "react-router";;
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
 
 // Menu items.
 const items = [
@@ -47,26 +57,37 @@ const items = [
     title: "Setting",
     url: "settings",
     icon: Settings,
-  }
+  },
 ];
 
-
 export function AppSidebar() {
-  let { pathname } = useLocation();
-  let path = pathname.split("/")[2];
-
   const location = useLocation();
 
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="font-semibold">General</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <Compose />
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel className="font-semibold">
+            General
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={location.pathname.includes(item.url)} className="text-sm data-[active=true]:bg-primary data-[active=true]:text-primary-foreground">
+                  <SidebarMenuButton
+                    asChild
+                    isActive={location.pathname.includes(item.url)}
+                    className="text-sm data-[active=true]:bg-primary data-[active=true]:text-primary-foreground"
+                  >
                     <Link to={item.url} className="">
                       <item.icon />
                       <span>{item.title}</span>
@@ -79,5 +100,5 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }

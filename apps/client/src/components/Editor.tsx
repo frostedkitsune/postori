@@ -1,34 +1,42 @@
-import React, { useState } from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
+import Blockquote from "@tiptap/extension-blockquote";
+import BulletList from "@tiptap/extension-bullet-list";
+import Color from "@tiptap/extension-color";
+import Link from "@tiptap/extension-link";
+import OrderedList from "@tiptap/extension-ordered-list";
 import TextAlign from "@tiptap/extension-text-align";
 import { TextStyle } from "@tiptap/extension-text-style";
-import Color from "@tiptap/extension-color";
-import BulletList from "@tiptap/extension-bullet-list";
-import OrderedList from "@tiptap/extension-ordered-list";
-import Blockquote from "@tiptap/extension-blockquote";
-import Link from "@tiptap/extension-link";
-
+import Underline from "@tiptap/extension-underline";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 import {
-  Bold,
-  Italic,
-  Underline as UnderlineIcon,
-  AlignLeft,
   AlignCenter,
+  AlignLeft,
   AlignRight,
+  Bold,
+  CaseSensitive,
+  Eraser,
+  Heading,
+  Italic,
+  Link2Off,
+  Link as LinkIcon,
   List,
   ListOrdered,
-  Quote,
-  Heading,
-  Link as LinkIcon,
-  Link2Off,
-  Eraser,
-  CaseSensitive,
   Pilcrow,
+  Quote,
+  Underline as UnderlineIcon,
 } from "lucide-react";
-
-import { Toggle } from "@/components/ui/toggle";
+import type React from "react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -36,25 +44,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { Toggle } from "@/components/ui/toggle";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Tooltip,TooltipContent,TooltipTrigger } from "./ui/tooltip";
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const Editor: React.FC<{
   content: string;
   setHtml: (html: string) => void;
   setPlainText: (text: string) => void;
 }> = ({ content, setHtml, setPlainText }) => {
-
   // for style toolbar
   const [showToolbar, setShowToolbar] = useState(false);
   // for link dialog open or close
@@ -102,7 +103,8 @@ const Editor: React.FC<{
   };
 
   // check link is there or not
-  const hasLink = editor.isActive("link") || !!editor.getAttributes("link").href;
+  const hasLink =
+    editor.isActive("link") || !!editor.getAttributes("link").href;
 
   return (
     <div className="relative max-h-[350px] min-h-48 p-1 overflow-y-scroll text-sm pb-14 cursor-text">
@@ -114,197 +116,221 @@ const Editor: React.FC<{
           bg-background/30 backdrop-blur-md shadow-lg p-1 rounded-xl border border-white/20 z-50"
         >
           <Tooltip>
-              <TooltipTrigger asChild>
-                <Select
-                  onValueChange={(value) => {
-                    editor
-                      .chain()
-                      .focus()
-                      .toggleHeading({ level: parseInt(value) as 1 | 2 | 3 | 4 | 5 | 6 })
-                      .run();
-                  }}
-                >
-                  <SelectTrigger className="w-20">
-                    <SelectValue placeholder={<Heading />} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {[1, 2, 3, 4, 5, 6].map((level) => (
-                      <SelectItem key={level} value={level.toString()}>
-                        H{level}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </TooltipTrigger>
-              <TooltipContent>Heading</TooltipContent>
-            </Tooltip>
+            <TooltipTrigger asChild>
+              <Select
+                onValueChange={(value) => {
+                  editor
+                    .chain()
+                    .focus()
+                    .toggleHeading({
+                      level: parseInt(value) as 1 | 2 | 3 | 4 | 5 | 6,
+                    })
+                    .run();
+                }}
+              >
+                <SelectTrigger className="w-20">
+                  <SelectValue placeholder={<Heading />} />
+                </SelectTrigger>
+                <SelectContent>
+                  {[1, 2, 3, 4, 5, 6].map((level) => (
+                    <SelectItem key={level} value={level.toString()}>
+                      H{level}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </TooltipTrigger>
+            <TooltipContent>Heading</TooltipContent>
+          </Tooltip>
 
-            {/* Paragraph */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Toggle
-                  pressed={editor.isActive("paragraph")}
-                  onPressedChange={() => editor.chain().focus().setParagraph().run()}
-                >
-                  <Pilcrow />
-                </Toggle>
-              </TooltipTrigger>
-              <TooltipContent>Paragraph</TooltipContent>
-            </Tooltip>
+          {/* Paragraph */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Toggle
+                pressed={editor.isActive("paragraph")}
+                onPressedChange={() =>
+                  editor.chain().focus().setParagraph().run()
+                }
+              >
+                <Pilcrow />
+              </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>Paragraph</TooltipContent>
+          </Tooltip>
 
-            {/* Bold */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Toggle
-                  pressed={editor.isActive("bold")}
-                  onPressedChange={() => editor.chain().focus().toggleBold().run()}
-                >
-                  <Bold />
-                </Toggle>
-              </TooltipTrigger>
-              <TooltipContent>Bold</TooltipContent>
-            </Tooltip>
+          {/* Bold */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Toggle
+                pressed={editor.isActive("bold")}
+                onPressedChange={() =>
+                  editor.chain().focus().toggleBold().run()
+                }
+              >
+                <Bold />
+              </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>Bold</TooltipContent>
+          </Tooltip>
 
-            {/* Italic */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Toggle
-                  pressed={editor.isActive("italic")}
-                  onPressedChange={() => editor.chain().focus().toggleItalic().run()}
-                >
-                  <Italic />
-                </Toggle>
-              </TooltipTrigger>
-              <TooltipContent>Italic</TooltipContent>
-            </Tooltip>
+          {/* Italic */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Toggle
+                pressed={editor.isActive("italic")}
+                onPressedChange={() =>
+                  editor.chain().focus().toggleItalic().run()
+                }
+              >
+                <Italic />
+              </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>Italic</TooltipContent>
+          </Tooltip>
 
-            {/* Underline */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Toggle
-                  pressed={editor.isActive("underline")}
-                  onPressedChange={() => editor.chain().focus().toggleUnderline().run()}
-                >
-                  <UnderlineIcon />
-                </Toggle>
-              </TooltipTrigger>
-              <TooltipContent>Underline</TooltipContent>
-            </Tooltip>
+          {/* Underline */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Toggle
+                pressed={editor.isActive("underline")}
+                onPressedChange={() =>
+                  editor.chain().focus().toggleUnderline().run()
+                }
+              >
+                <UnderlineIcon />
+              </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>Underline</TooltipContent>
+          </Tooltip>
 
-            {/* Alignments */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Toggle
-                  pressed={editor.isActive({ textAlign: "left" })}
-                  onPressedChange={() => editor.chain().focus().setTextAlign("left").run()}
-                >
-                  <AlignLeft />
-                </Toggle>
-              </TooltipTrigger>
-              <TooltipContent>Align Left</TooltipContent>
-            </Tooltip>
+          {/* Alignments */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Toggle
+                pressed={editor.isActive({ textAlign: "left" })}
+                onPressedChange={() =>
+                  editor.chain().focus().setTextAlign("left").run()
+                }
+              >
+                <AlignLeft />
+              </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>Align Left</TooltipContent>
+          </Tooltip>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Toggle
-                  pressed={editor.isActive({ textAlign: "center" })}
-                  onPressedChange={() => editor.chain().focus().setTextAlign("center").run()}
-                >
-                  <AlignCenter />
-                </Toggle>
-              </TooltipTrigger>
-              <TooltipContent>Align Center</TooltipContent>
-            </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Toggle
+                pressed={editor.isActive({ textAlign: "center" })}
+                onPressedChange={() =>
+                  editor.chain().focus().setTextAlign("center").run()
+                }
+              >
+                <AlignCenter />
+              </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>Align Center</TooltipContent>
+          </Tooltip>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Toggle
-                  pressed={editor.isActive({ textAlign: "right" })}
-                  onPressedChange={() => editor.chain().focus().setTextAlign("right").run()}
-                >
-                  <AlignRight />
-                </Toggle>
-              </TooltipTrigger>
-              <TooltipContent>Align Right</TooltipContent>
-            </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Toggle
+                pressed={editor.isActive({ textAlign: "right" })}
+                onPressedChange={() =>
+                  editor.chain().focus().setTextAlign("right").run()
+                }
+              >
+                <AlignRight />
+              </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>Align Right</TooltipContent>
+          </Tooltip>
 
-            {/* Lists & Blockquote */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Toggle
-                  pressed={editor.isActive("bulletList")}
-                  onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
-                >
-                  <List />
-                </Toggle>
-              </TooltipTrigger>
-              <TooltipContent>Bullet List</TooltipContent>
-            </Tooltip>
+          {/* Lists & Blockquote */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Toggle
+                pressed={editor.isActive("bulletList")}
+                onPressedChange={() =>
+                  editor.chain().focus().toggleBulletList().run()
+                }
+              >
+                <List />
+              </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>Bullet List</TooltipContent>
+          </Tooltip>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Toggle
-                  pressed={editor.isActive("orderedList")}
-                  onPressedChange={() => editor.chain().focus().toggleOrderedList().run()}
-                >
-                  <ListOrdered />
-                </Toggle>
-              </TooltipTrigger>
-              <TooltipContent>Numbered List</TooltipContent>
-            </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Toggle
+                pressed={editor.isActive("orderedList")}
+                onPressedChange={() =>
+                  editor.chain().focus().toggleOrderedList().run()
+                }
+              >
+                <ListOrdered />
+              </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>Numbered List</TooltipContent>
+          </Tooltip>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Toggle
-                  pressed={editor.isActive("blockquote")}
-                  onPressedChange={() => editor.chain().focus().toggleBlockquote().run()}
-                >
-                  <Quote />
-                </Toggle>
-              </TooltipTrigger>
-              <TooltipContent>Blockquote</TooltipContent>
-            </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Toggle
+                pressed={editor.isActive("blockquote")}
+                onPressedChange={() =>
+                  editor.chain().focus().toggleBlockquote().run()
+                }
+              >
+                <Quote />
+              </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>Blockquote</TooltipContent>
+          </Tooltip>
 
-            {/* Set Link */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Toggle pressed={false} onPressedChange={handleOpenLinkDialog}>
-                  <LinkIcon />
-                </Toggle>
-              </TooltipTrigger>
-              <TooltipContent>Insert Link</TooltipContent>
-            </Tooltip>
+          {/* Set Link */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Toggle pressed={false} onPressedChange={handleOpenLinkDialog}>
+                <LinkIcon />
+              </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>Insert Link</TooltipContent>
+          </Tooltip>
 
-            {/* Unlink */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className={hasLink ? "" : "opacity-50 cursor-not-allowed"}>
+          {/* Unlink */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className={hasLink ? "" : "opacity-50 cursor-not-allowed"}>
                 <Toggle
                   pressed={false}
                   disabled={!hasLink}
-                  onPressedChange={() => editor.chain().focus().unsetLink().run()}
+                  onPressedChange={() =>
+                    editor.chain().focus().unsetLink().run()
+                  }
                 >
                   <Link2Off />
                 </Toggle>
-                 </div>
-              </TooltipTrigger>
-              <TooltipContent>Remove Link</TooltipContent>
-            </Tooltip>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>Remove Link</TooltipContent>
+          </Tooltip>
 
-            {/* Clear Format */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Toggle
-                  pressed={false}
-                  onPressedChange={() =>
-                    editor.chain().focus().unsetAllMarks().clearNodes().run()
-                  }
-                >
-                  <Eraser />
-                </Toggle>
-              </TooltipTrigger>
-              <TooltipContent>Clear Format</TooltipContent>
-            </Tooltip>
+          {/* Clear Format */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Toggle
+                pressed={false}
+                onPressedChange={() =>
+                  editor.chain().focus().unsetAllMarks().clearNodes().run()
+                }
+              >
+                <Eraser />
+              </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>Clear Format</TooltipContent>
+          </Tooltip>
         </div>
       )}
 
@@ -329,7 +355,12 @@ const Editor: React.FC<{
                 if (linkUrl.trim() === "") {
                   editor.chain().focus().unsetLink().run();
                 } else {
-                  editor.chain().focus().extendMarkRange("link").setLink({ href: linkUrl }).run();
+                  editor
+                    .chain()
+                    .focus()
+                    .extendMarkRange("link")
+                    .setLink({ href: linkUrl })
+                    .run();
                 }
                 setOpenLinkDialog(false);
                 setLinkUrl("");
@@ -352,7 +383,7 @@ const Editor: React.FC<{
             <CaseSensitive />
           </Toggle>
         </TooltipTrigger>
-        <TooltipContent >Show/Hide Toolbar</TooltipContent>
+        <TooltipContent>Show/Hide Toolbar</TooltipContent>
       </Tooltip>
     </div>
   );
