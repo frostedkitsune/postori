@@ -269,7 +269,7 @@ const Editor: React.FC<{
 
       {/*toolbar toggle*/}
       <Toggle
-        className="fixed bottom-6 left-64"
+        className="fixed bottom-6 left-52"
         pressed={showToolbar}
         onPressedChange={() => setShowToolbar(!showToolbar)}
       >

@@ -124,9 +124,6 @@ const Compose=()=>{
             <Image />
           </Button>
           <Button variant="ghost">
-            <Link />
-          </Button>
-          <Button variant="ghost">
             <Paperclip />
           </Button>
           <Button variant="ghost" className="text-destructive ml-auto">
