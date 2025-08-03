@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -22,14 +24,31 @@ import {
   Quote,
   Heading,
   Link as LinkIcon,
+  Link2Off,
   Eraser,
-  CaseSensitive
+  CaseSensitive,
+  Pilcrow,
 } from "lucide-react";
 
-
 import { Toggle } from "@/components/ui/toggle";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const Editor: React.FC<{
   content: string;
@@ -37,10 +56,13 @@ const Editor: React.FC<{
   setPlainText: (text: string) => void;
 }> = ({ content, setHtml, setPlainText }) => {
 
-  // for toogle the toolbar
+  // for style toolbar
   const [showToolbar, setShowToolbar] = useState(false);
+  // for link dialog open or close
+  const [openLinkDialog, setOpenLinkDialog] = useState(false);
+  // for set link
+  const [linkUrl, setLinkUrl] = useState("");
 
-  // tiptap editor config
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -59,6 +81,8 @@ const Editor: React.FC<{
       Blockquote,
       Link.configure({
         openOnClick: true,
+        autolink: true,
+        defaultProtocol: "https",
       }),
     ],
     content: content,
@@ -71,25 +95,37 @@ const Editor: React.FC<{
   // checks
   if (!editor) return null;
 
+  // handler for link dialog
+  const handleOpenLinkDialog = () => {
+    const previousUrl = editor.getAttributes("link").href || "";
+    setLinkUrl(previousUrl);
+    setOpenLinkDialog(true);
+  };
+
+  // check link is there or not
+  const hasLink = editor.isActive("link") || !!editor.getAttributes("link").href;
+
   return (
     <div className="relative max-h-[350px] min-h-48 p-1 overflow-y-scroll text-sm pb-14 cursor-text">
-      {/* Editor content */}
       <EditorContent editor={editor} />
 
-      {/* Floating Toolbar */}
       {showToolbar && (
-        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 flex items-center gap-2
-          bg-background/30 backdrop-blur-md shadow-lg p-1 rounded-xl border border-white/20 z-50">
-
-
-          {/* Headings Selector */}
+        <div
+          className="fixed bottom-20 left-1/2 -translate-x-1/2 flex items-center gap-2
+          bg-background/30 backdrop-blur-md shadow-lg p-1 rounded-xl border border-white/20 z-50"
+        >
+          {/* Headings */}
           <Select
             onValueChange={(value) => {
-              editor.chain().focus().toggleHeading({ level: parseInt(value) as 1 | 2 | 3 | 4 | 5 | 6 }).run();
+              editor
+                .chain()
+                .focus()
+                .toggleHeading({ level: parseInt(value) as 1 | 2 | 3 | 4 | 5 | 6 })
+                .run();
             }}
           >
             <SelectTrigger className="w-20">
-              <SelectValue placeholder={ <Heading/>} />
+              <SelectValue placeholder={<Heading />} />
             </SelectTrigger>
             <SelectContent>
               {[1, 2, 3, 4, 5, 6].map((level) => (
@@ -100,7 +136,15 @@ const Editor: React.FC<{
             </SelectContent>
           </Select>
 
-          {/*bold*/}
+          {/* Paragraph Mode */}
+          <Toggle
+            pressed={editor.isActive("paragraph")}
+            onPressedChange={() => editor.chain().focus().setParagraph().run()}
+          >
+            <Pilcrow />
+          </Toggle>
+
+          {/* Bold */}
           <Toggle
             pressed={editor.isActive("bold")}
             onPressedChange={() => editor.chain().focus().toggleBold().run()}
@@ -108,7 +152,7 @@ const Editor: React.FC<{
             <Bold />
           </Toggle>
 
-          {/*italic*/}
+          {/* Italic */}
           <Toggle
             pressed={editor.isActive("italic")}
             onPressedChange={() => editor.chain().focus().toggleItalic().run()}
@@ -116,7 +160,7 @@ const Editor: React.FC<{
             <Italic />
           </Toggle>
 
-          {/*underline*/}
+          {/* Underline */}
           <Toggle
             pressed={editor.isActive("underline")}
             onPressedChange={() => editor.chain().focus().toggleUnderline().run()}
@@ -124,23 +168,19 @@ const Editor: React.FC<{
             <UnderlineIcon />
           </Toggle>
 
-          {/*left align*/}
+          {/* Alignments */}
           <Toggle
             pressed={editor.isActive({ textAlign: "left" })}
             onPressedChange={() => editor.chain().focus().setTextAlign("left").run()}
           >
             <AlignLeft />
           </Toggle>
-
-          {/*center align*/}
           <Toggle
             pressed={editor.isActive({ textAlign: "center" })}
             onPressedChange={() => editor.chain().focus().setTextAlign("center").run()}
           >
             <AlignCenter />
           </Toggle>
-
-          {/*right align*/}
           <Toggle
             pressed={editor.isActive({ textAlign: "right" })}
             onPressedChange={() => editor.chain().focus().setTextAlign("right").run()}
@@ -148,23 +188,19 @@ const Editor: React.FC<{
             <AlignRight />
           </Toggle>
 
-          {/*unorder*/}
+          {/* Lists & Blockquote */}
           <Toggle
             pressed={editor.isActive("bulletList")}
             onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
           >
             <List />
           </Toggle>
-
-          {/*order*/}
           <Toggle
             pressed={editor.isActive("orderedList")}
             onPressedChange={() => editor.chain().focus().toggleOrderedList().run()}
           >
             <ListOrdered />
           </Toggle>
-
-          {/*quote*/}
           <Toggle
             pressed={editor.isActive("blockquote")}
             onPressedChange={() => editor.chain().focus().toggleBlockquote().run()}
@@ -172,35 +208,71 @@ const Editor: React.FC<{
             <Quote />
           </Toggle>
 
-          {/*link*/}
-          <Toggle
-            pressed={editor.isActive("link")}
-            onPressedChange={() => {
-              const url = window.prompt("Enter URL");
-              if (url) {
-                editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
-              }
-            }}
-          >
+          {/* Set Link */}
+          <Toggle pressed={false} onPressedChange={handleOpenLinkDialog}>
             <LinkIcon />
           </Toggle>
 
-          {/*remove format*/}
+          {/* Unlink */}
           <Toggle
             pressed={false}
-            onPressedChange={() => editor.chain().focus().unsetAllMarks().clearNodes().run()}
+            disabled={!hasLink}
+            onPressedChange={() => editor.chain().focus().unsetLink().run()}
+          >
+            <Link2Off />
+          </Toggle>
+
+          {/* Clear Format */}
+          <Toggle
+            pressed={false}
+            onPressedChange={() =>
+              editor.chain().focus().unsetAllMarks().clearNodes().run()
+            }
           >
             <Eraser />
           </Toggle>
         </div>
       )}
 
-      {/* Show/Hide button */}
+      {/* Link Dialog */}
+      <Dialog open={openLinkDialog} onOpenChange={setOpenLinkDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Set Link</DialogTitle>
+            <DialogDescription>
+              Enter the URL for the selected text.
+            </DialogDescription>
+          </DialogHeader>
+          <Input
+            placeholder="https://example.com"
+            value={linkUrl}
+            onChange={(e) => setLinkUrl(e.target.value)}
+          />
+          <DialogFooter>
+            <Button
+              variant="default"
+              onClick={() => {
+                if (linkUrl.trim() === "") {
+                  editor.chain().focus().unsetLink().run();
+                } else {
+                  editor.chain().focus().extendMarkRange("link").setLink({ href: linkUrl }).run();
+                }
+                setOpenLinkDialog(false);
+                setLinkUrl("");
+              }}
+            >
+              Save Link
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/*toolbar toggle*/}
       <Toggle
         className="fixed bottom-6 left-64"
         pressed={showToolbar}
         onPressedChange={() => setShowToolbar(!showToolbar)}
-        >
+      >
         <CaseSensitive />
       </Toggle>
     </div>
