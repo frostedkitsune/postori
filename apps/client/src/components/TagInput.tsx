@@ -1,5 +1,3 @@
-"use client";
-
 import { X } from "lucide-react";
 import { useState, useRef, type KeyboardEvent, type FocusEvent } from "react";
 

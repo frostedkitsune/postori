@@ -94,7 +94,7 @@ const Compose=()=>{
         {/*From + To + CC/BCC */}
         {/*from*/}
         <LabelTag label="from">
-          <span className="text-[12px] py-1">postori@error.party</span>
+          <span className="text-[12px] bg-muted px-2 py-1 rounded-full cursor-not-allowed">postori@error.party</span>
         </LabelTag>
         <div className="flex flex-row items-start gap-2">
           <div className="flex-1">
