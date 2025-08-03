@@ -48,7 +48,7 @@ const Compose=()=>{
           <Pen className="mr-2" /> Compose
         </Button>
       </DialogTrigger>
-      <DialogContent className={`${maximized ? "min-w-[90vw] h-[90vh] max-w-none" : "sm:max-w-2xl sm:min-h-[90vh"} flex flex-col justify-start`} showCloseButton={false}>
+      <DialogContent className={`${maximized ? "min-w-[90vw] h-[90vh] max-w-none" : "sm:max-w-3xl sm:min-h-[90vh"} flex flex-col justify-start`} showCloseButton={false}>
         <DialogHeader>
           <DialogTitle className="mb-2">New Message</DialogTitle>
         </DialogHeader>
@@ -97,7 +97,7 @@ const Compose=()=>{
             <TagInput value={bccEmails} onChange={setBccEmails}/>
           </LabelTag></>
         }
-        
+
         {/*subject*/}
         <LabelTag label="subject">
           <Input className=" border-none outline-none focus:shadow-none shadow-none focus-visible:ring-0 font-semibold pb-4"/>
