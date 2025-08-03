@@ -6,8 +6,9 @@ import {
   DialogHeader,
   DialogClose,
 } from "@/components/ui/dialog";
+import { Tooltip,TooltipTrigger,TooltipContent } from "./ui/tooltip";
 import { Button } from "./ui/button";
-import { Pen, Image, Link, Paperclip, Trash, Minimize2, Maximize2 } from "lucide-react";
+import { Pen, Image, Paperclip, Trash, Minimize2, Maximize2 } from "lucide-react";
 import { Input } from "./ui/input";
 import { useState } from "react";
 import { TagInput } from "./TagInput";
@@ -39,8 +40,8 @@ const Compose=()=>{
   const [bccEmails, setBccEmails] = useState<string[]>([]);
 
   // for content
-  const [html, setHtml] = useState<string>("");
-  const [plainText, setPlainText] = useState<string>("");
+  const [, setHtml] = useState<string>("");
+  const [, setPlainText] = useState<string>("");
 
   // handler for hide (cc+bcc)
   function hideCheckCcBcc() {
@@ -61,15 +62,33 @@ const Compose=()=>{
           <DialogTitle className="mb-2">New Message</DialogTitle>
         </DialogHeader>
         <div className="absolute top-4 right-4 flex gap-2">
-          <button
-            onClick={() => setMaximized(!maximized)}
-            className="p-1 rounded hover:bg-accent">
-                {maximized ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-          </button>
-          <DialogClose className="p-1 rounded hover:bg-accent">
-            <span className="sr-only">Close</span>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={() => setMaximized(!maximized)}
+                className="p-1 rounded hover:bg-accent"
+              >
+                {maximized ? (
+                  <Minimize2 className="w-4 h-4" />
+                ) : (
+                  <Maximize2 className="w-4 h-4" />
+                )}
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              {maximized ? "Minimize" : "Maximize"}
+            </TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <DialogClose className="p-1 rounded hover:bg-accent">
+                <span className="sr-only">Close</span>
                 ✕
-          </DialogClose>
+              </DialogClose>
+            </TooltipTrigger>
+            <TooltipContent side="top">Close</TooltipContent>
+          </Tooltip>
         </div>
 
         {/*From + To + CC/BCC */}
@@ -120,15 +139,32 @@ const Compose=()=>{
         {/*footer*/}
         <div className="flex items-center gap-2 mt-auto">
           <Button className="mr-2">Send</Button>
-          <Button variant="ghost">
-            <Image />
-          </Button>
-          <Button variant="ghost">
-            <Paperclip />
-          </Button>
-          <Button variant="ghost" className="text-destructive ml-auto">
-            <Trash />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost">
+                <Image />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="top">Insert Image</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost">
+                <Paperclip />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="top">Attach File</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild >
+              <Button variant="ghost" className="text-destructive ml-auto">
+                <Trash />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="top">Reset Draft</TooltipContent>
+          </Tooltip>
         </div>
       </DialogContent>
     </Dialog>
