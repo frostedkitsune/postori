@@ -14,11 +14,12 @@ import { TagInput } from "./TagInput";
 import Editor from "./Editor";
 
 // this component is for wrap the emails and label
-const LabelTag: React.FC<{ label: string; children?: React.ReactNode }> = ({
+const LabelTag: React.FC<{ label: string; children?: React.ReactNode; handlerForHideCcBcc?():void }> = ({
   label,
   children,
+  handlerForHideCcBcc
 }) => (
-  <div className="flex flex-row items-start gap-2 mb-2">
+  <div className="flex flex-row items-start gap-2 mb-2" onClick={handlerForHideCcBcc}>
     <span className="w-12 text-zinc-400 mb-auto">{label}:</span>
     {children}
   </div>
@@ -41,6 +42,12 @@ const Compose=()=>{
   const [html, setHtml] = useState<string>("");
   const [plainText, setPlainText] = useState<string>("");
 
+  // handler for hide (cc+bcc)
+  function hideCheckCcBcc() {
+    setCcState(ccEmails.length > 0);
+    setBccState(bccEmails.length > 0);
+  }
+
   return (
     <Dialog>
       <DialogTrigger>
@@ -48,7 +55,8 @@ const Compose=()=>{
           <Pen className="mr-2" /> Compose
         </Button>
       </DialogTrigger>
-      <DialogContent className={`${maximized ? "min-w-[90vw] h-[90vh] max-w-none" : "sm:max-w-3xl sm:min-h-[90vh"} flex flex-col justify-start`} showCloseButton={false}>
+      <DialogContent
+        className={`${maximized ? "min-w-[90vw] h-[90vh] max-w-none" : "sm:max-w-3xl sm:min-h-[90vh"} flex flex-col justify-start`} showCloseButton={false}>
         <DialogHeader>
           <DialogTitle className="mb-2">New Message</DialogTitle>
         </DialogHeader>
@@ -99,7 +107,7 @@ const Compose=()=>{
         }
 
         {/*subject*/}
-        <LabelTag label="subject">
+        <LabelTag label="subject" handlerForHideCcBcc={hideCheckCcBcc}>
           <Input className=" border-none outline-none focus:shadow-none shadow-none focus-visible:ring-0 font-semibold pb-4"/>
         </LabelTag>
 
