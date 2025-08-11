@@ -3,7 +3,7 @@ import {
   Maximize2,
   Minimize2,
   Paperclip,
-  Pen,
+  PenBox,
   Trash,
 } from "lucide-react";
 import { useState } from "react";
@@ -69,7 +69,7 @@ const Compose = () => {
     <Dialog>
       <DialogTrigger className="w-full">
         <SidebarMenuButton className="shadow-md w-full outline-none bg-background">
-          <Pen />
+          <PenBox />
           Compose
         </SidebarMenuButton>
       </DialogTrigger>
