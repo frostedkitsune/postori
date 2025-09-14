@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.2",
+    "@supabase/supabase-js": "^2.56.0",
     "hono": "^4.8.9",
     "nodemailer": "^6.9.12"
   },
