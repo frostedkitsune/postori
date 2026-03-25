@@ -1,22 +1,44 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import { logger } from "hono/logger";
+import { supabaseConnection } from "./database";
+
+// import routes
 import email from "./routes/email";
+import mail from "./routes/mail";
 
-const app = new Hono()
+// main app
+const app = new Hono();
 
-  // middlewares
-  .use(
-    "/api/*",
-    cors({
-      origin: "http://localhost:5173",
-      credentials: true,
-    }),
-  )
+// middlewares
+app.use(logger());
 
-  // basepath
-  .basePath("/api")
+app.use(
+  "/*",
+  cors({
+    origin: ["http://localhost:5173"],
+    allowMethods: ["POST", "GET", "PATCH", "DELETE", "OPTIONS"],
+    allowHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  }),
+);
 
-  // routes
-  .route("/email", email);
+// supabase connection fire
+supabaseConnection().then(() => {
+  console.log(`Server is running on 3000`);
+});
+
+// Base route
+app.get("/", (c) => c.text("Mail Service is Live"));
+
+// 404 route
+app.get("/notfound", (c) => c.notFound());
+
+// Connect route groups
+const api = app.basePath("/api");
+api.route("/email", email);
+
+const mailApp = app.basePath("/mail");
+mailApp.route("/", mail);
 
 export default app;

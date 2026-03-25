@@ -4,8 +4,16 @@
 
 ![Build Status](https://img.shields.io/badge/status-ongoing-orange)
 ![Build Status](https://img.shields.io/badge/project_by-error.party-f51b51)
+
 ![Bun](https://img.shields.io/badge/Bun-F472B6?style=flat&logo=bun&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=black)
+![React](https://img.shields.io/badge/React-58c4dc?style=flat&logo=react&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-%2320232a?style=flat&logo=next.js&logoColor=white)
+![Hono.js](https://img.shields.io/badge/Hono.js-FF9C24?style=flat&logo=hono&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
+![TailwindCss](https://img.shields.io/badge/TailwindCss-23c6ea?style=flat&logo=tailwindcss&logoColor=white)
+![Vitest](https://img.shields.io/badge/Vitest-bac726?style=flat&logo=vitest&logoColor=white)
+![Biome.Js](https://img.shields.io/badge/Biome-60a5fa?style=flat&logo=biome&logoColor=white)
+![Left hook](https://img.shields.io/badge/Lefthook-ff1e1e?style=fillt&logo=lefthook&logoColor=white)
 
 </div>
 
@@ -31,7 +39,7 @@ Postori is built with a modern and robust tech stack:
 - **Styling**: Tailwind CSS
 - **Component Library**: shadcn/ui
 - **Testing**: Vitest
-- **Linting/Formatting**: ESLint & Prettier
+- **Linting/Formatting**: Biome
 
 ### Project Structure
 
