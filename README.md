@@ -13,17 +13,17 @@
 
 This project is created by **error.party** and is open to contributions from the community.
 
-## ✨ Features
+## Features
 
 - **Modern & Clean UI**: A beautiful and intuitive interface built with **shadcn/ui** and **Tailwind CSS**.
 - **Multiple theme**: Automatic theme detection and a manual switcher for user preference.
 - **Fully Responsive**: Enjoy a seamless experience on desktop, tablet, and mobile devices.
 
-## 🚀 Getting Started
+## Getting Started
 
 Follow these instructions to get a local copy of Postori up and running on your machine for development and testing purposes.
 
-### 🛠️ Tech Stack
+### Tech Stack
 
 Postori is built with a modern and robust tech stack:
 
@@ -33,7 +33,7 @@ Postori is built with a modern and robust tech stack:
 - **Testing**: Vitest
 - **Linting/Formatting**: ESLint & Prettier
 
-### 📁 Project Structure
+### Project Structure
 
 Here is a high-level overview of the project's folder structure:
 
@@ -49,10 +49,10 @@ Here is a high-level overview of the project's folder structure:
 └── README.md
 ```
 
-## 🤝 Contributing
+## Contributing
 
 Please make sure to read our [**Contributing Guidelines**](./CONTRIBUTING.md) before you start.
 
-## 📄 License
+## License
 
 This project is distributed under the MIT License. See [`LICENSE`](./LICENSE) for more information.
